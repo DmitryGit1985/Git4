@@ -6,12 +6,18 @@ public class SpawnObject : MonoBehaviour
 {
     [SerializeField] Rigidbody rigidBody;
     [SerializeField] float speed = 5.0f;
+    [SerializeField] private List<Mesh> mechlist;
+    private MeshFilter meshFilter;
     private Vector3 lastVelocity;
+    private Material material;
     private void Start()
     {
         rigidBody = GetComponent<Rigidbody>();
         Vector3 position = new Vector3(Random.Range(-8.0f, 8.0f), 2, Random.Range(-8.0f, 8.0f));
         rigidBody.velocity = position * speed;
+        material = rigidBody.GetComponent<Renderer>().material;
+        meshFilter = rigidBody.GetComponent<MeshFilter>();
+
         //Как просчитать размер где можно спауниться правильно?
     }
     private void FixedUpdate()
@@ -42,7 +48,7 @@ public class SpawnObject : MonoBehaviour
     }
     private void RandomColor()
     {
-        rigidBody.gameObject.GetComponent<Renderer>().material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+        material.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
     private void RandomSize()
     {
@@ -51,6 +57,8 @@ public class SpawnObject : MonoBehaviour
     }
     private void RandomForm()
     {
-
+        int randomMechNumber = Random.Range(0, mechlist.Count);
+        Mesh mesh = mechlist[randomMechNumber];
+        meshFilter.mesh = mesh;
     }
 }
